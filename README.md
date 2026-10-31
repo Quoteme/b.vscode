@@ -73,6 +73,7 @@ own Java, Graphviz and ProB.
 npm install
 npm run check   # strict type check
 npm test        # keyboard, wire format and panel tests
+B_LANGUAGE_SERVER=$(which b-language-server) npm test  # also against the real server
 npm run package # b-language-server-<version>.vsix
 code --extensionDevelopmentPath=$PWD path/to/models
 ```

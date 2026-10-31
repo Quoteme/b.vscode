@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Type check, unit tests and package
+        run: npm test && npm run package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: b-language-server-vsix
+          path: '*.vsix'
+
+  server:
+    # The wire format against the language server that b.nvim's flake builds.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Build b-language-server
+        run: echo "B_LANGUAGE_SERVER=$(nix build github:Quoteme/b.nvim#b-language-server --no-link --print-out-paths)/bin/b-language-server" >> "$GITHUB_ENV"
+      - name: Tests against the server
+        run: npm test
