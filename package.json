@@ -1,0 +1,183 @@
+{
+  "name": "b-language-server",
+  "displayName": "B Language Server",
+  "description": "The B method and Event-B with ProB: diagnostics, proof obligations, hover, completion and animation",
+  "version": "0.1.0",
+  "publisher": "quoteme",
+  "license": "MIT",
+  "repository": "https://github.com/Quoteme/b.vscode",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:b",
+    "onLanguage:eventb"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "b",
+        "aliases": [
+          "B",
+          "Classical B"
+        ],
+        "extensions": [
+          ".mch",
+          ".ref",
+          ".imp",
+          ".rmch",
+          ".def"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "eventb",
+        "aliases": [
+          "Event-B"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "b",
+        "scopeName": "source.b",
+        "path": "./syntaxes/b.tmLanguage.json"
+      },
+      {
+        "language": "eventb",
+        "scopeName": "source.eventb",
+        "path": "./syntaxes/eventb.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "prob.animate",
+        "title": "Animate with ProB",
+        "category": "ProB"
+      },
+      {
+        "command": "prob.animate.stop",
+        "title": "Stop the animation",
+        "category": "ProB"
+      },
+      {
+        "command": "prob.pickSymbol",
+        "title": "Insert an Event-B symbol",
+        "category": "ProB"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "prob.animate",
+          "when": "editorLangId =~ /^(b|eventb)$/"
+        },
+        {
+          "command": "prob.pickSymbol",
+          "when": "editorLangId == eventb"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "prob.pickSymbol",
+        "key": "ctrl+alt+s",
+        "when": "editorTextFocus && editorLangId == eventb"
+      },
+      {
+        "command": "prob.animate",
+        "key": "ctrl+alt+a",
+        "when": "editorTextFocus && editorLangId =~ /^(b|eventb)$/"
+      }
+    ],
+    "configuration": {
+      "title": "B Language Server",
+      "properties": {
+        "prob.server.command": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "b-language-server",
+            "--stdio"
+          ],
+          "description": "Command starting the B language server."
+        },
+        "prob.keyboard": {
+          "type": "boolean",
+          "default": true,
+          "description": "Replace ASCII combinations by Event-B symbols while typing, like Rodin."
+        },
+        "prob.visualization.format": {
+          "type": "string",
+          "enum": [
+            "svg",
+            "pdf",
+            "png"
+          ],
+          "default": "svg",
+          "description": "Format Graphviz renders graphs of the animated state to."
+        },
+        "prob.probHome": {
+          "type": "string",
+          "default": "DEFAULT",
+          "description": "ProB's home directory; DEFAULT uses the bundled ProB."
+        },
+        "prob.wdChecks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Report well-definedness problems."
+        },
+        "prob.strictChecks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Report ProB's stricter checks."
+        },
+        "prob.performanceHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Report ProB's performance hints."
+        },
+        "prob.debugMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Log the server's work to its output channel."
+        },
+        "prob.poTimeout": {
+          "type": "integer",
+          "default": 1000,
+          "description": "Milliseconds ProB may spend on each proof obligation."
+        },
+        "prob.modelCheckStates": {
+          "type": "integer",
+          "default": 100000,
+          "description": "States the model checker explores at most."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --platform=node --format=cjs --external:vscode --minify --sourcemap --outfile=dist/extension.js",
+    "check": "tsc --noEmit",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test test/*.test.ts",
+    "package": "npm run check && npm run build && vsce package"
+  },
+  "dependencies": {
+    "effect": "^3.18.0",
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "~1.90.0",
+    "@vscode/vsce": "^3.2.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.9.0"
+  }
+}

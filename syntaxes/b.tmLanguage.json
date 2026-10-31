@@ -1,0 +1,82 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "B",
+  "scopeName": "source.b",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "name": "string.quoted.double.b",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.b",
+          "match": "\\\\."
+        }
+      ]
+    },
+    {
+      "name": "string.quoted.other.b",
+      "begin": "```",
+      "end": "```"
+    },
+    {
+      "name": "keyword.other.component.b",
+      "match": "\\b(IMPLEMENTATION|RULES_MACHINE|REFINEMENT|MACHINE|SYSTEM|MODEL|END)\\b"
+    },
+    {
+      "name": "keyword.control.b",
+      "match": "\\b(RULE_FORALL|VARIANT|CHOICE|EITHER|SELECT|ELSIF|WHILE|CASE|ELSE|THEN|WHEN|FOR|DO|IF|OF|OR)\\b"
+    },
+    {
+      "name": "keyword.other.b",
+      "match": "\\b(ABSTRACT_CONSTANTS|ABSTRACT_VARIABLES|CONCRETE_CONSTANTS|CONCRETE_VARIABLES|VISIBLE_CONSTANTS|VISIBLE_VARIABLES|HIDDEN_CONSTANTS|HIDDEN_VARIABLES|LOCAL_OPERATIONS|COUNTEREXAMPLE|INITIALISATION|INITIALIZATION|COMPUTATION|CONSTRAINTS|DEFINITIONS|DUMMY_VALUE|ASSERTIONS|ERROR_TYPE|ON_SUCCESS|OPERATIONS|PROPERTIES|REFERENCES|CONSTANTS|FREETYPES|INVARIANT|RULE_FAIL|UNCHECKED|VARIABLES|FUNCTION|INCLUDES|PROMOTES|EXTENDS|IMPORTS|REFINES|ASSERT|DEFINE|EVENTS|EXPECT|VALUES|BEGIN|VALUE|WHERE|BODY|RULE|SEES|SETS|TYPE|USES|skip|ANY|LET|PRE|VAR|BE|IN)\\b"
+    },
+    {
+      "name": "keyword.operator.quantifier.b",
+      "match": "[!#%∀∃λ∑∏]"
+    },
+    {
+      "name": "support.type.b",
+      "match": "\\b(NATURAL1|INTEGER|NATURAL|STRING|FLOAT|BOOL|NAT1|REAL|INT|NAT)\\b"
+    },
+    {
+      "name": "constant.language.b",
+      "match": "\\b(MAXINT|MININT|FALSE|TRUE)\\b"
+    },
+    {
+      "name": "support.function.b",
+      "match": "\\b(closure1|ceiling|closure|iterate|INTER|SIGMA|UNION|first|floor|front|inter|iseq1|union|FIN1|POW1|bool|card|conc|iseq|last|perm|pred|prj1|prj2|real|seq1|size|succ|tail|FIN|POW|dom|fnc|max|min|not|ran|rel|rev|seq|PI|id)\\b"
+    },
+    {
+      "name": "constant.numeric.b",
+      "match": "\\b\\d+(\\.\\d+)?\\b"
+    },
+    {
+      "name": "keyword.operator.b",
+      "match": "[ℕℤℙℝ∅⊤⊥¬∧∨⇒⇔∀∃∈∉⊆⊂⊈⊄∪∩∖×↦↔⇸→⤔↣⤀↠⤖◁▷⩤⩥⊗∥λ∘∼‥≤≥≠÷≔⋃⋂∣·-]|:=|::|<--|==|\\|->|-->|\\+->|>->|<->|<=>|=>|<:|/:|\\\\/|/\\\\|&|<\\||\\|>|<<\\||\\|>>|<\\+|\\.\\.|[-+*/<>=:|^~;,]"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.documentation.b",
+          "begin": "/\\*@",
+          "end": "\\*/"
+        },
+        {
+          "name": "comment.block.b",
+          "begin": "/\\*",
+          "end": "\\*/"
+        },
+        {
+          "name": "comment.line.double-slash.b",
+          "match": "//.*$"
+        }
+      ]
+    }
+  }
+}

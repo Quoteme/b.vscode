@@ -1,0 +1,70 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Event-B",
+  "scopeName": "source.eventb",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "name": "keyword.other.component.eventb",
+      "match": "\\b(context|machine|end)\\b"
+    },
+    {
+      "name": "storage.modifier.eventb",
+      "match": "\\b(anticipated|convergent|ordinary)\\b"
+    },
+    {
+      "name": "keyword.other.eventb",
+      "match": "\\b(invariants|constants|variables|extends|refines|theorem|variant|axioms|events|begin|event|where|sees|sets|then|when|with|any)\\b"
+    },
+    {
+      "name": "entity.name.label.eventb",
+      "match": "@[\\w.']+"
+    },
+    {
+      "name": "support.type.eventb",
+      "match": "\\b(BOOL|NAT1|INT|NAT)\\b|ℕ1?|ℤ|ℙ1?"
+    },
+    {
+      "name": "constant.language.eventb",
+      "match": "\\b(FALSE|TRUE)\\b|⊤|⊥|∅"
+    },
+    {
+      "name": "support.function.eventb",
+      "match": "\\b(partition|finite|inter|union|POW1|bool|card|pred|prj1|prj2|succ|POW|dom|max|min|ran|id)\\b"
+    },
+    {
+      "name": "keyword.operator.word.eventb",
+      "match": "\\b(oftype|circ|not|or)\\b"
+    },
+    {
+      "name": "constant.numeric.eventb",
+      "match": "\\b\\d+\\b"
+    },
+    {
+      "name": "keyword.operator.eventb",
+      "match": "[ℕℤℙℝ∅⊤⊥¬∧∨⇒⇔∀∃∈∉⊆⊂⊈⊄∪∩∖×↦↔⇸→⤔↣⤀↠⤖◁▷⩤⩥⊗∥λ∘∼‥≤≥≠÷≔⋃⋂∣·-]|:=|::|<--|==|\\|->|-->|\\+->|>->|<->|<=>|=>|<:|/:|\\\\/|/\\\\|&|<\\||\\|>|<<\\||\\|>>|<\\+|\\.\\.|⦂|:∈|:∣|[-+*/<>=:|^~;,]"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.documentation.b",
+          "begin": "/\\*@",
+          "end": "\\*/"
+        },
+        {
+          "name": "comment.block.b",
+          "begin": "/\\*",
+          "end": "\\*/"
+        },
+        {
+          "name": "comment.line.double-slash.b",
+          "match": "//.*$"
+        }
+      ]
+    }
+  }
+}
