@@ -3,26 +3,31 @@
 > [!CAUTION]
 > **Parts of this project were AI generated!** Proceed with caution!
 
-VS Code extension for the B method and Event-B, using the
+VS Code extension for the B method and Event-B that brings the
 [B language server](https://github.com/Quoteme/b-language-server) and the
-[ProB](https://prob.hhu.de/) animator and model checker. It is the VS Code
-counterpart of [b.nvim](https://github.com/Quoteme/b.nvim).
+[ProB](https://prob.hhu.de/) animator and model checker into the editor, like
+[b.nvim](https://github.com/Quoteme/b.nvim) does for Neovim.
 
-- ProB's parse, type and well-definedness errors, and Rodin's static checks and
-  proof obligations, as diagnostics. Hover documentation and completion come
-  with them.
-- **Animation** in a panel beside the model (code action _ProB: animate_,
-  `ProB: Animate with ProB`, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>A</kbd>). The
-  panel lists the enabled events, the state, the invariants and the history.
-  The model shows the current values next to their declarations.
-- **Proof obligations** in a list you can jump from (code action _ProB: list
-  proof obligations_). Code actions also model check and discharge them.
-- **Rodin's keyboard** in Event-B: `:` becomes `∈`, `-->` becomes `→`, `NAT`
-  becomes `ℕ`, and so on. `ProB: Insert an Event-B symbol`
-  (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>) picks a symbol from a list.
-- Highlighting for classical B (`.mch`, `.ref`, `.imp`, `.rmch`, `.def`) and
-  for Event-B in Camille notation (`.mch` files starting with `machine` or
-  `context`).
+## Installation
+
+```bash
+git clone https://github.com/Quoteme/b.vscode && cd b.vscode
+npm install && npm run package
+code --install-extension b-language-server-*.vsix
+
+# option 1: open vscode inside a nix shell with this:
+nix shell github:Quoteme/b.nvim#b-language-server --command code .
+# option 2: for the lazy people (introduces hidden state!):
+nix profile install github:Quoteme/b.nvim#b-language-server
+```
+
+## Features
+
+- **Diagnostics:** ProB's errors and Rodin's proof obligations, with hover and completion.
+- **Animation** beside the model (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>A</kbd>), with current values shown inline.
+- **Proof obligation list** and model checking as code actions.
+- **Rodin's keyboard** for Event-B (`:` → `∈`), and a symbol picker (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>).
+- **Highlighting** for classical B and Event-B.
 
 ## Animation panel keys
 
@@ -44,13 +49,8 @@ counterpart of [b.nvim](https://github.com/Quoteme/b.nvim).
 ## Requirements
 
 `b-language-server` must be on the `PATH`; set `prob.server.command` to use
-another location. With Nix, b.nvim's flake provides it together with its Java,
-Graphviz and ProB:
-
-```sh
-nix shell github:Quoteme/b.nvim#b-language-server
-code .
-```
+another location. b.nvim's flake (see [Installation](#installation)) brings its
+own Java, Graphviz and ProB.
 
 ## Settings
 
