@@ -8,6 +8,8 @@ VS Code extension for the B method and Event-B that brings the
 [ProB](https://prob.hhu.de/) animator and model checker into the editor, like
 [b.nvim](https://github.com/Quoteme/b.nvim) does for Neovim.
 
+<img width="973" height="570" alt="image" src="https://github.com/user-attachments/assets/19382739-7eea-4c67-9d45-5f13d35c5254" />
+
 ## Installation
 
 ```bash
