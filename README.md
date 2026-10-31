@@ -89,3 +89,13 @@ code --extensionDevelopmentPath=$PWD path/to/models
 | `src/view.ts`      | the panel's HTML and the actions it sends (pure)                  |
 | `src/eventb.ts`    | Rodin's keyboard and Event-B detection (pure)                     |
 | `src/ui.ts`        | VS Code prompts as effects                                        |
+
+## Alternatives
+
+[hhu-stups/b-language-extension](https://github.com/hhu-stups/b-language-extension)
+offers parts of the features of this project.
+
+## Acknowledgements
+
+This project builds on
+[hhu-stups/b-language-server](https://github.com/hhu-stups/b-language-server).
