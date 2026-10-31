@@ -77,11 +77,12 @@ export const activate = async (context: vscode.ExtensionContext) => {
     },
   )
   const animate = animation(client, () => clientSettings().visualization.format)
+  // The client registers the server's own commands (prob.animate, prob.showPOs, …); these must not clash with them.
   const commands: Record<string, (...args: ReadonlyArray<unknown>) => Effect.Effect<void, { readonly _tag: string; readonly message: string }>> = {
-    'prob.animate': () => Effect.flatMap(activeDocument, (document) => animate.start(document.uri)),
+    'prob.animation.start': () => Effect.flatMap(activeDocument, (document) => animate.start(document.uri)),
     // The "ProB: animate" code action passes the model's URI.
     'prob.animate.open': (uri) => (typeof uri === 'string' ? animate.start(vscode.Uri.parse(uri)) : Effect.flatMap(activeDocument, (d) => animate.start(d.uri))),
-    'prob.animate.stop': () => animate.stop,
+    'prob.animation.stop': () => animate.stop,
     'prob.pickSymbol': () => pickSymbol,
   }
   context.subscriptions.push(

@@ -57,12 +57,12 @@
     ],
     "commands": [
       {
-        "command": "prob.animate",
+        "command": "prob.animation.start",
         "title": "Animate with ProB",
         "category": "ProB"
       },
       {
-        "command": "prob.animate.stop",
+        "command": "prob.animation.stop",
         "title": "Stop the animation",
         "category": "ProB"
       },
@@ -75,7 +75,7 @@
     "menus": {
       "commandPalette": [
         {
-          "command": "prob.animate",
+          "command": "prob.animation.start",
           "when": "editorLangId =~ /^(b|eventb)$/"
         },
         {
@@ -91,7 +91,7 @@
         "when": "editorTextFocus && editorLangId == eventb"
       },
       {
-        "command": "prob.animate",
+        "command": "prob.animation.start",
         "key": "ctrl+alt+a",
         "when": "editorTextFocus && editorLangId =~ /^(b|eventb)$/"
       }
