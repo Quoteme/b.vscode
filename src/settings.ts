@@ -17,7 +17,8 @@ export class Settings extends Schema.Class<Settings>('Settings')({
 }) {}
 
 export class ClientSettings extends Schema.Class<ClientSettings>('ClientSettings')({
-  server: withDefault(Schema.Struct({ command: Schema.NonEmptyArray(Schema.String) }), { command: ['b-language-server', '--stdio'] }),
+  /** Empty: b-language-server on the PATH, else the bundled server (src/server.ts). */
+  server: withDefault(Schema.Struct({ command: Schema.Array(Schema.String) }), { command: [] }),
   /** Replace ASCII combinations by Event-B symbols while typing, like Rodin. */
   keyboard: withDefault(Schema.Boolean, true),
   /** Format Graphviz renders graphs to. */

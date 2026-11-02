@@ -3,7 +3,7 @@
   "displayName": "B Language Server",
   "description": "The B method and Event-B with ProB: diagnostics, proof obligations, hover, completion and animation",
   "version": "0.1.0",
-  "publisher": "quoteme",
+  "publisher": "happel",
   "license": "MIT",
   "repository": "https://github.com/Quoteme/b.vscode",
   "engines": {
@@ -104,11 +104,8 @@
           "items": {
             "type": "string"
           },
-          "default": [
-            "b-language-server",
-            "--stdio"
-          ],
-          "description": "Command starting the B language server."
+          "default": [],
+          "description": "Command starting the B language server. Empty: `b-language-server --stdio` if it is on the PATH, else the server bundled with the extension."
         },
         "prob.keyboard": {
           "type": "boolean",
@@ -176,7 +173,7 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/vscode": "~1.90.0",
-    "@vscode/vsce": "^3.2.0",
+    "@vscode/vsce": "^4.1.0",
     "esbuild": "^0.25.0",
     "typescript": "^5.9.0"
   }

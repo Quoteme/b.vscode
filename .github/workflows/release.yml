@@ -1,0 +1,122 @@
+name: Release
+
+# A tag v<version> (matching package.json) packages the extension for every platform, with
+# b-language-server, its probcli and a Java runtime bundled, and publishes it to the Marketplace.
+# Run by hand, it packages without publishing.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+env:
+  # The b-language-server commit to bundle.
+  SERVER_REPOSITORY: Quoteme/b-language-server
+  SERVER_REF: 0ea2f68b881e835869df888e99de9479ba66206c
+
+jobs:
+  server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.SERVER_REPOSITORY }}
+          ref: ${{ env.SERVER_REF }}
+          path: b-language-server
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build the server's jar
+        working-directory: b-language-server
+        run: ./gradlew shadowJar
+      - name: One jar per platform, with only its probcli
+        run: |
+          mkdir jars
+          for os in linux macos windows; do
+            scripts/strip-probcli.sh b-language-server/build/libs/*-all.jar "$os" "jars/b-language-server-$os.jar"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: server-jars
+          path: jars/
+
+  package:
+    needs: server
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { target: linux-x64, os: linux, runner: ubuntu-latest }
+          - { target: darwin-arm64, os: macos, runner: macos-latest }
+          - { target: darwin-x64, os: macos, runner: macos-15-intel }
+          - { target: win32-x64, os: windows, runner: windows-latest }
+          # Every other platform: no bundled server, b-language-server must be on the PATH.
+          - { target: universal, os: none, runner: ubuntu-latest }
+    runs-on: ${{ matrix.runner }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check && npm run build
+      - uses: actions/setup-java@v4
+        if: matrix.os != 'none'
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: actions/download-artifact@v4
+        if: matrix.os != 'none'
+        with:
+          name: server-jars
+          path: jars
+      - name: Bundle the server and a Java runtime
+        if: matrix.os != 'none'
+        run: scripts/bundle-server.sh "jars/b-language-server-${{ matrix.os }}.jar"
+      - name: Tests against the bundled server
+        if: matrix.os == 'linux' || matrix.os == 'macos'
+        run: |
+          printf '#!/bin/sh\nexec "%s/server/jre/bin/java" -jar "%s/server/b-language-server.jar" "$@"\n' "$PWD" "$PWD" > "$RUNNER_TEMP/b-language-server"
+          chmod +x "$RUNNER_TEMP/b-language-server"
+          B_LANGUAGE_SERVER="$RUNNER_TEMP/b-language-server" npm test
+      - name: Package
+        run: |
+          if [ "${{ matrix.target }}" = universal ]; then
+            npx vsce package --out b-language-server-universal.vsix
+          else
+            npx vsce package --target ${{ matrix.target }} --out b-language-server-${{ matrix.target }}.vsix
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vsix-${{ matrix.target }}
+          path: '*.vsix'
+
+  publish:
+    needs: package
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    # Trusted publishing: the Marketplace accepts this workflow's OIDC token instead of a PAT.
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: The tag names package.json's version
+        run: test "${GITHUB_REF_NAME#v}" = "$(node -p 'require("./package.json").version')"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: vsix-*
+          merge-multiple: true
+      - name: Publish to the Visual Studio Marketplace
+        run: npx vsce publish --oidc --packagePath ./*.vsix

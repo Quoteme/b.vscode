@@ -1,0 +1,35 @@
+MIT License
+
+Copyright (c) 2026 Luca Leon Happel
+
+This extension is loosely based on b-language-extension
+(https://github.com/hhu-stups/b-language-extension) by Sebastian Stock and
+HHU STUPS, and on b.nvim (https://github.com/Quoteme/b.nvim), which derives from
+the work of David Schneider. It builds on b-language-server
+(https://github.com/hhu-stups/b-language-server) by Sebastian Stock and the
+HHU STUPS contributors, and on ProB (https://prob.hhu.de/) by HHU STUPS.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+The platform-specific packages also contain b-language-server, ProB (probcli)
+and a Java runtime. These are not covered by the license above: each is
+distributed under its own license (b-language-server: Eclipse Public License
+2.0; the Java runtime: GPLv2 with the Classpath Exception).

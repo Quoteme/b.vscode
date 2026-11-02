@@ -8,6 +8,7 @@ import { animation } from './animation.ts'
 import { isEventB, settle } from './eventb.ts'
 import { call, type ProofObligation, ProofObligations } from './protocol.ts'
 import { ClientSettings, read, Settings } from './settings.ts'
+import { bundled, makeExecutable, onPath, serverCommand } from './server.ts'
 import { symbols } from './symbols.ts'
 import { pick, reveal, run } from './ui.ts'
 
@@ -60,11 +61,18 @@ const keyboard = (event: vscode.TextDocumentChangeEvent) => {
 }
 
 export const activate = async (context: vscode.ExtensionContext) => {
-  const [command, ...args] = clientSettings().server.command
+  const { command, args } = serverCommand(
+    clientSettings().server.command,
+    () => onPath('b-language-server'),
+    () => bundled(context.extensionPath),
+  )
+  if (command === bundled(context.extensionPath)?.command) {
+    makeExecutable(context.extensionPath)
+  }
   const client: LanguageClient = new LanguageClient(
     'prob',
     'B Language Server',
-    { command, args },
+    { command, args: [...args] },
     {
       documentSelector: ['b', 'eventb'].map((language) => ({ scheme: 'file', language })),
       synchronize: { configurationSection: 'prob' },
@@ -94,6 +102,6 @@ export const activate = async (context: vscode.ExtensionContext) => {
   )
   vscode.workspace.textDocuments.forEach(detectEventB)
   await client.start().catch((e: unknown) =>
-    vscode.window.showErrorMessage(`ProB: cannot start ${command} (${e instanceof Error ? e.message : String(e)}); is b-language-server on the PATH?`),
+    vscode.window.showErrorMessage(`ProB: cannot start ${command} (${e instanceof Error ? e.message : String(e)}); is b-language-server on the PATH, or set in prob.server.command?`),
   )
 }

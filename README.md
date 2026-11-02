@@ -12,15 +12,26 @@ VS Code extension for the B method and Event-B that brings the
 
 ## Installation
 
-```bash
-git clone https://github.com/Quoteme/b.vscode && cd b.vscode
-npm install && npm run package
-code --install-extension b-language-server-*.vsix
+Install **B Language Server** (`happel.b-language-server`) from the Marketplace. On Linux
+x64, macOS and Windows x64 it brings b-language-server, ProB and a Java runtime along; only
+[Graphviz](https://graphviz.org/) is needed for graph visualisations.
 
+On NixOS the bundled ProB and Java will not run without `nix-ld`; put b.nvim's
+`b-language-server` on the `PATH` instead, which the extension prefers:
+
+```bash
 # option 1: open vscode inside a nix shell with this:
 nix shell github:Quoteme/b.nvim#b-language-server --command code .
 # option 2: for the lazy people (introduces hidden state!):
 nix profile install github:Quoteme/b.nvim#b-language-server
+```
+
+From source (without a bundled server):
+
+```bash
+git clone https://github.com/Quoteme/b.vscode && cd b.vscode
+npm install && npm run package
+code --install-extension b-language-server-*.vsix
 ```
 
 ## Features
@@ -50,15 +61,15 @@ nix profile install github:Quoteme/b.nvim#b-language-server
 
 ## Requirements
 
-`b-language-server` must be on the `PATH`; set `prob.server.command` to use
-another location. b.nvim's flake (see [Installation](#installation)) brings its
-own Java, Graphviz and ProB.
+The extension starts, in this order: the command in `prob.server.command`;
+`b-language-server --stdio` if it is on the `PATH` (b.nvim's flake brings its own
+Java, Graphviz and ProB); the server bundled with the platform's vsix.
 
 ## Settings
 
 | Setting                     | Default                             |
 | --------------------------- | ----------------------------------- |
-| `prob.server.command`       | `["b-language-server", "--stdio"]`  |
+| `prob.server.command`       | `[]` (PATH, then bundled)           |
 | `prob.keyboard`             | `true`                              |
 | `prob.visualization.format` | `svg`                               |
 | `prob.probHome`             | `DEFAULT`                           |
@@ -78,17 +89,31 @@ npm test        # keyboard, wire format and panel tests
 B_LANGUAGE_SERVER=$(which b-language-server) npm test  # also against the real server
 npm run package # b-language-server-<version>.vsix
 code --extensionDevelopmentPath=$PWD path/to/models
+
+# a vsix with the server bundled, for the platform this runs on (needs a JDK 21 for jlink)
+scripts/strip-probcli.sh path/to/b-language-server-all.jar linux /tmp/server.jar
+scripts/bundle-server.sh /tmp/server.jar
+npx vsce package --target linux-x64
 ```
 
 | File               | Contents                                                          |
 | ------------------ | ----------------------------------------------------------------- |
 | `src/extension.ts` | language client, commands, Event-B detection, keyboard hook       |
+| `src/server.ts`    | which server command to start: setting, PATH or bundled           |
 | `src/protocol.ts`  | Schemas of the server's wire types, and the typed commands        |
 | `src/settings.ts`  | the `prob` settings as `Schema.Class`es                           |
 | `src/animation.ts` | the animation session: panel, inline values, actions              |
 | `src/view.ts`      | the panel's HTML and the actions it sends (pure)                  |
 | `src/eventb.ts`    | Rodin's keyboard and Event-B detection (pure)                     |
 | `src/ui.ts`        | VS Code prompts as effects                                        |
+
+### Releasing
+
+Pushing a tag `v<version>` matching `package.json`'s version runs
+`.github/workflows/release.yml`: it builds b-language-server at `SERVER_REF`, packages a vsix
+per platform with the server and a jlinked Java runtime, tests it against the bundled server and
+publishes all of them by trusted publishing: the publisher `happel` has a policy for this
+repository and `release.yml`, so no token is stored.
 
 ## Alternatives
 
