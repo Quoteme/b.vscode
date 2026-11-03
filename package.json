@@ -4,6 +4,7 @@
   "description": "The B method and Event-B with ProB: diagnostics, proof obligations, hover, completion and animation",
   "version": "0.1.0",
   "publisher": "happel",
+  "icon": "media/icon.png",
   "license": "MIT",
   "repository": "https://github.com/Quoteme/b.vscode",
   "engines": {
