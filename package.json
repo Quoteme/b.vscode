@@ -2,7 +2,7 @@
   "name": "prob-language-extension",
   "displayName": "B/ProB Advanced Language Support",
   "description": "The B method and Event-B with ProB: diagnostics, proof obligations, hover, completion and animation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "happel",
   "icon": "media/icon.png",
   "license": "MIT",
