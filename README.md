@@ -12,7 +12,7 @@ VS Code extension for the B method and Event-B that brings the
 
 ## Installation
 
-Install **B Language Server** (`happel.b-language-server`) from the Marketplace. On Linux
+Install **B/ProB Advanced Language Support** (`happel.prob-language-extension`) from the Marketplace. On Linux
 x64, macOS and Windows x64 it brings b-language-server, ProB and a Java runtime along; only
 [Graphviz](https://graphviz.org/) is needed for graph visualisations.
 
@@ -31,7 +31,7 @@ From source (without a bundled server):
 ```bash
 git clone https://github.com/Quoteme/b.vscode && cd b.vscode
 npm install && npm run package
-code --install-extension b-language-server-*.vsix
+code --install-extension prob-language-extension-*.vsix
 ```
 
 ## Features
@@ -87,7 +87,7 @@ npm install
 npm run check   # strict type check
 npm test        # keyboard, wire format and panel tests
 B_LANGUAGE_SERVER=$(which b-language-server) npm test  # also against the real server
-npm run package # b-language-server-<version>.vsix
+npm run package # prob-language-extension-<version>.vsix
 code --extensionDevelopmentPath=$PWD path/to/models
 
 # a vsix with the server bundled, for the platform this runs on (needs a JDK 21 for jlink)

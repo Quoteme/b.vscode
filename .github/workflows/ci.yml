@@ -18,7 +18,7 @@ jobs:
         run: npm test && npm run package
       - uses: actions/upload-artifact@v4
         with:
-          name: b-language-server-vsix
+          name: prob-language-extension-vsix
           path: '*.vsix'
 
   server:
