@@ -24,7 +24,12 @@ const showObligations = (obligations: ReadonlyArray<ProofObligation>) =>
     Effect.flatMap(reveal),
   )
 
-const activeDocument = Effect.map(Effect.fromNullable(vscode.window.activeTextEditor), (editor) => editor.document)
+/** The document of the editor active when this runs, not when the extension loaded. */
+const activeDocument = Effect.suspend(() => Effect.fromNullable(vscode.window.activeTextEditor)).pipe(
+  Effect.map((editor) => editor.document),
+  // Not a cancelled prompt, so `run` shows it.
+  Effect.orElseFail(() => ({ _tag: 'NoEditor', message: 'open a B or Event-B file in an editor to animate it' }) as const),
+)
 
 const pickSymbol = Effect.gen(function* () {
   const editor = yield* Effect.fromNullable(vscode.window.activeTextEditor)
