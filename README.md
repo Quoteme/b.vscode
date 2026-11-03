@@ -13,7 +13,8 @@ VS Code extension for the B method and Event-B that brings the
 ## Installation
 
 Install **B/ProB Advanced Language Support** (`happel.prob-language-extension`) from the Marketplace. On Linux
-x64, macOS and Windows x64 it brings b-language-server, ProB and a Java runtime along; only
+x64, macOS and Windows x64 it brings b-language-server, ProB (with Z3, except on Windows) and a
+Java runtime along; only
 [Graphviz](https://graphviz.org/) is needed for graph visualisations.
 
 On NixOS the bundled ProB and Java will not run without `nix-ld`; put b.nvim's
@@ -91,7 +92,7 @@ npm run package # prob-language-extension-<version>.vsix
 code --extensionDevelopmentPath=$PWD path/to/models
 
 # a vsix with the server bundled, for the platform this runs on (needs a JDK 21 for jlink)
-scripts/strip-probcli.sh path/to/b-language-server-all.jar linux /tmp/server.jar
+scripts/prepare-server-jar.sh path/to/b-language-server-all.jar linux-x64 /tmp/server.jar
 scripts/bundle-server.sh /tmp/server.jar
 npx vsce package --target linux-x64
 ```
@@ -110,8 +111,9 @@ npx vsce package --target linux-x64
 ### Releasing
 
 Pushing a tag `v<version>` matching `package.json`'s version runs
-`.github/workflows/release.yml`: it builds b-language-server at `SERVER_REF`, packages a vsix
-per platform with the server and a jlinked Java runtime, tests it against the bundled server and
+`.github/workflows/release.yml`: it builds b-language-server at `SERVER_REF`, adds Z3 to its probcli
+(`scripts/prepare-server-jar.sh`; ProB has no Z3 on Windows), packages a vsix per platform with
+the server and a jlinked Java runtime, tests it against the bundled server and
 publishes all of them by trusted publishing: the publisher `happel` has a policy for this
 repository and `release.yml`, so no token is stored.
 

@@ -30,6 +30,15 @@ axioms
   @axm1 limit ∈ ℕ1
 end
 `,
+  // ProB checks the theorem with Z3 when its own solver gives up.
+  'Persons.mch': `context Persons
+sets P
+constants a b
+axioms
+  @axm1 partition(P, {a}, {b})
+  theorem @thm1 ∀p·(p ∈ P ⇒ (p = a ∨ p = b))
+end
+`,
   'Bank.mch': `machine Bank sees Ctx
 variables n
 invariants
@@ -59,6 +68,10 @@ test('the server answers as the extension reads it', { skip: server === undefine
   const settings = Schema.encodeSync(Settings)(Schema.decodeUnknownSync(Settings)({}))
   connection.onRequest('workspace/configuration', (params: { items: ReadonlyArray<unknown> }) => params.items.map(() => settings))
   connection.onRequest(() => null)
+  const diagnostics = new Map<string, ReadonlyArray<{ message: string }>>()
+  connection.onNotification('textDocument/publishDiagnostics', (p: { uri: string; diagnostics: ReadonlyArray<{ message: string }> }) =>
+    diagnostics.set(p.uri, p.diagnostics),
+  )
   connection.onNotification(() => {})
   connection.listen()
 
@@ -113,6 +126,14 @@ test('the server answers as the extension reads it', { skip: server === undefine
       return found.length > 0 || tries === 0 ? found : new Promise((r) => setTimeout(() => r(obligations(tries - 1)), 500))
     }
     assert.ok((await obligations(120)).length > 0)
+
+    await open('Persons.mch', 'eventb')
+    const checked = async (tries: number): Promise<ReadonlyArray<{ message: string }>> => {
+      const found = diagnostics.get(uri('Persons.mch'))
+      return found !== undefined || tries === 0 ? (found ?? []) : new Promise((r) => setTimeout(() => r(checked(tries - 1)), 500))
+    }
+    // Without Z3, ProB reports "File for component does not exist: …/lib/z3interface.so".
+    assert.deepEqual((await checked(120)).map((d) => d.message).filter((m) => /z3/i.test(m)), [])
   } finally {
     await connection.sendRequest('shutdown').catch(() => undefined)
     await connection.sendNotification('exit').catch(() => undefined)

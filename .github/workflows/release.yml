@@ -31,11 +31,11 @@ jobs:
       - name: Build the server's jar
         working-directory: b-language-server
         run: ./gradlew shadowJar
-      - name: One jar per platform, with only its probcli
+      - name: One jar per target, with only its probcli, and Z3 for it
         run: |
           mkdir jars
-          for os in linux macos windows; do
-            scripts/strip-probcli.sh b-language-server/build/libs/*-all.jar "$os" "jars/b-language-server-$os.jar"
+          for target in linux-x64 darwin-arm64 darwin-x64 win32-x64; do
+            scripts/prepare-server-jar.sh b-language-server/build/libs/*-all.jar "$target" "jars/b-language-server-$target.jar"
           done
       - uses: actions/upload-artifact@v4
         with:
@@ -78,7 +78,7 @@ jobs:
           path: jars
       - name: Bundle the server and a Java runtime
         if: matrix.os != 'none'
-        run: scripts/bundle-server.sh "jars/b-language-server-${{ matrix.os }}.jar"
+        run: scripts/bundle-server.sh "jars/b-language-server-${{ matrix.target }}.jar"
       - name: Tests against the bundled server
         if: matrix.os == 'linux' || matrix.os == 'macos'
         run: |

@@ -29,7 +29,9 @@ SOFTWARE.
 
 ---
 
-The platform-specific packages also contain b-language-server, ProB (probcli)
-and a Java runtime. These are not covered by the license above: each is
-distributed under its own license (b-language-server: Eclipse Public License
-2.0; the Java runtime: GPLv2 with the Classpath Exception).
+The platform-specific packages also contain b-language-server, ProB (probcli),
+the Z3 theorem prover (https://github.com/Z3Prover/z3, by Microsoft
+Corporation) and a Java runtime. These are not covered by the license above:
+each is distributed under its own license (b-language-server: Eclipse Public
+License 2.0; Z3: MIT, its license text ships next to it as Z3-LICENSE.txt;
+the Java runtime: GPLv2 with the Classpath Exception).

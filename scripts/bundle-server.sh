@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Puts b-language-server into server/ for the vsix of the platform this runs on: the server's jar
-# (see scripts/strip-probcli.sh) and a Java runtime jlinked from the JDK this runs with.
+# (see scripts/prepare-server-jar.sh) and a Java runtime jlinked from the JDK this runs with.
 #
 #   scripts/bundle-server.sh path/to/b-language-server.jar
 set -euo pipefail
