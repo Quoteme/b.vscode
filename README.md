@@ -12,13 +12,26 @@ VS Code extension for the B method and Event-B that brings the
 
 ## Installation
 
-Install **B/ProB Advanced Language Support** (`happel.prob-language-extension`) from the Marketplace. On Linux
-x64, macOS and Windows x64 it brings b-language-server, ProB (with Z3, except on Windows) and a
-Java runtime along; only
-[Graphviz](https://graphviz.org/) is needed for graph visualisations.
+### From the Marketplace (recommended)
 
-On NixOS the bundled ProB and Java will not run without `nix-ld`; put b.nvim's
-`b-language-server` on the `PATH` instead, which the extension prefers:
+Install [B/ProB Advanced Language Support](https://marketplace.visualstudio.com/items?itemName=happel.prob-language-extension)
+from the Extensions view, or run:
+
+```bash
+code --install-extension happel.prob-language-extension
+```
+
+- **Benefits:** nothing else to install. On Linux x64, macOS and Windows x64 the extension brings
+  b-language-server, ProB with Z3 and a Java runtime along, and VS Code keeps it up to date.
+- **Downsides:** a large download (around 80 MB per platform). Graph visualisations still need
+  [Graphviz](https://graphviz.org/). ProB has no Z3 on Windows, and Z3 needs glibc 2.39 or
+  newer on Linux. Other platforms get no bundled server. On NixOS the bundled ProB and Java only
+  run with `nix-ld`.
+
+### With Nix
+
+A `b-language-server` on the `PATH` takes precedence over the bundled one. b.nvim's flake builds
+it with its own Java, ProB, Z3 and Graphviz, so it works on NixOS without `nix-ld`:
 
 ```bash
 # option 1: open vscode inside a nix shell with this:
@@ -27,7 +40,10 @@ nix shell github:Quoteme/b.nvim#b-language-server --command code .
 nix profile install github:Quoteme/b.nvim#b-language-server
 ```
 
-From source (without a bundled server):
+### From source
+
+This builds the extension without a bundled server, so it needs `b-language-server` on the `PATH`
+(see [With Nix](#with-nix)):
 
 ```bash
 git clone https://github.com/Quoteme/b.vscode && cd b.vscode
