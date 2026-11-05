@@ -138,6 +138,10 @@ repository and `release.yml`, so no token is stored.
 [hhu-stups/b-language-extension](https://github.com/hhu-stups/b-language-extension)
 offers parts of the features of this project.
 
+| b-language-extension highlighting | b.vscode highlighting |
+| :---: | :---: |
+| <img width="890" height="690" alt="b-language-extension highlighting" src="https://github.com/user-attachments/assets/aee88ab5-e2fc-43c6-8d42-01e116b77a78" /> | <img width="827" height="697" alt="b.vscode highlighting" src="https://github.com/user-attachments/assets/14e629a7-4cb2-484e-8969-0f7c5b749479" /> |
+
 ## Acknowledgements
 
 This project builds on
